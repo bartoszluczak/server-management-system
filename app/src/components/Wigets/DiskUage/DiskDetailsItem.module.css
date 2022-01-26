@@ -1,0 +1,53 @@
+.diskWidget {
+    border-top: 1px solid #809096;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.label {
+    font-size: 16px !important;
+    font-weight: lighter;
+    color: #367fac !important;
+    padding-left: 0 !important;
+}
+
+.label span {
+    font-weight: bold;
+    color: #a7aaad;
+}
+
+.legendLine {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.legendLine span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: normal;
+}
+
+.colorContainer {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    border: 1px solid rgba(214, 229, 244, 0.3);
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.freeSpaceContainer {
+    background-color: rgba(54,127,172,0.5);
+}
+
+.occupiedSpaceContainer {
+    background-color: rgba(167,170,173,0.15);
+}

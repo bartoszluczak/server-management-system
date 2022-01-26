@@ -1,0 +1,37 @@
+.switchContainer {
+    background-color: rgba(128, 144, 150, 0.3);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 4px;
+    width: 70px;
+    justify-content: space-between;
+    z-index: 1;
+    position: relative;
+    padding-right: 7px;
+}
+
+.icon {
+    font-size: 24px;
+    height: 24px;
+    padding: 1px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.currentState {
+    display: block;
+    position: absolute;
+    height: 26px;
+    width: 38px;
+    background-color: rgb(208, 223, 238);
+    border-radius: 15px;
+    z-index: -1;
+    transition: 500ms;
+    left: 5px;
+}
+.left {
+    left: 47%;
+}

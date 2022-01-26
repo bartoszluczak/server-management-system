@@ -1,0 +1,32 @@
+.container {
+    background-color: rgba(52, 52, 56, 0.5);
+    border-radius: 5px;
+    display: block;
+    padding: 15px;
+    width: min-content;
+    height: min-content;
+    border: 1px solid rgba(214, 229, 244, 0.3);
+    margin: 10px;
+}
+.container h1 {
+    font-size: 26px;
+    color: #a7aaad;
+    margin: 0;
+    padding: 2px;
+}
+
+.container h2 {
+    font-size: 20px;
+    color: #a7aaad;
+    margin: 0;
+    padding:2px;
+}
+
+.container h3 {
+    font-size: 16px;
+    color: #367fac;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 5px;
+    font-weight: bold;
+}

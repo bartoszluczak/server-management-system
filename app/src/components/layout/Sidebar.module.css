@@ -1,0 +1,25 @@
+.sidebar {
+    display: flex;
+    width: 30%;
+    max-width: 350px;
+    height: calc(100vh - 80px);
+    /*display: block;*/
+    margin: 0;
+    padding: 30px;
+    background-color: rgb(29, 30, 31);
+}
+
+.sidebarHeader {
+    width: 100%;
+    border-bottom: 1px solid #809096;
+    display: inline;
+    height: min-content;
+}
+
+.sidebarHeader h3 {
+    color: #a7aaad;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 5px;
+}
