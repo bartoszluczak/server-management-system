@@ -1,5 +1,5 @@
 import React from "react";
-import diskDetails from "../../../models/diskDetails";
+import { DiskDetails } from "../../../models/diskDetails";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import options from "./chartOptions";
@@ -7,7 +7,7 @@ import classes from "./DiskDetailsItem.module.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DisksDetailsDoughDiagram: React.FC<{ diskData: diskDetails }> = (
+const DisksDetailsDoughDiagram: React.FC<{ diskData: DiskDetails }> = (
   props
 ) => {
   const data = {

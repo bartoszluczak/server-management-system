@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import classes from "./Switch.module.css";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../store";
@@ -9,10 +9,6 @@ const Switch: React.FC<any> = (props) => {
   const currentDiskDiagramType = useTypedSelector(
     (state) => state.diskDiagramState
   );
-
-  useEffect(() => {
-    console.log("log useEffevt: " + currentDiskDiagramType);
-  }, [currentDiskDiagramType]);
 
   const switchStateHandler = () => {
     dispatch(

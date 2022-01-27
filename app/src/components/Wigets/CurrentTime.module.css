@@ -1,0 +1,8 @@
+.currentTimeContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    border-top: 1px solid #809096;
+    margin-top: 5px;
+    padding-top: 5px;
+}

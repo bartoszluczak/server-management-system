@@ -3,7 +3,7 @@ import classes from "./DiskUsage.module.css";
 import WidgetContainer from "../../UI/WidgetContainer";
 
 import axios from "axios";
-import DiskDetails from "../../../models/diskDetails";
+import { DiskDetails } from "../../../models/diskDetails";
 import DisksDetailsDoughDiagram from "./DisksDetailsDoughDiagram";
 import Switch from "../../UI/Switch";
 import { FcDoughnutChart, FcLineChart } from "react-icons/fc";
