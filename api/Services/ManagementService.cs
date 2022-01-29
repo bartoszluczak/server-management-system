@@ -421,7 +421,9 @@ namespace ServerManagementSystem.Services
                     var diskSize = Math.Round(double.Parse(size) / (1024 * 1024 * 1024), 2);
                     var diskFreespace = Math.Round(double.Parse(freeSpace) / (1024 * 1024 * 1024), 2);
 
-                    storageDetailsList.Add(
+                    if (diskSize > 0)
+                    {
+                        storageDetailsList.Add(
                         new StorageDetails()
                         {
                             ServerName = scope.Path.Server,
@@ -432,6 +434,8 @@ namespace ServerManagementSystem.Services
                             DiskUsedSpace = Math.Round(diskSize - diskFreespace, 2),
                             FreeSpacePercentage = Math.Round(diskFreespace / diskSize * 100, 2)
                         });
+                    }
+                    
                 }
 
 

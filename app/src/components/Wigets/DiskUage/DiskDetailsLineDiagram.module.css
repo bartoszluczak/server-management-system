@@ -1,9 +1,9 @@
 .diskWidget {
     border-top: 1px solid #809096;
     margin-top: 10px;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
     padding-top: 10px;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
 }
 
 .label {
@@ -12,4 +12,12 @@
     color: #367fac !important;
     padding-left: 0 !important;
     margin-bottom: 5px;
+}
+.diagramGroupContainer {
+    display: flex;
+    flex-direction: row;
+    border-top: 1px solid #809096;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
 }

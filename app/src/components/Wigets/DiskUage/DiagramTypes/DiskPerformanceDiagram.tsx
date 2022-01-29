@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import classes from "./AvgDiskBytesDiagram.module.css";
+import classes from "./DiskPerformanceDiagram.module.css";
 
 ChartJS.register(
   CategoryScale,
@@ -22,9 +22,13 @@ ChartJS.register(
   Legend
 );
 
-const AvgDiskBytesDiagram: React.FC<{
-  avgDiskBytesData: any;
+const DiskPerformanceDiagram: React.FC<{
+  diskData: any;
   dataDivider: number;
+  diskDataUnit: string;
+  datasetsToPlot: string[];
+  datasetsLabels: string[];
+  diagramTitle: string;
 }> = (props) => {
   const labels = [new Date().toLocaleString()];
 
@@ -52,11 +56,7 @@ const AvgDiskBytesDiagram: React.FC<{
   const [dataState, setDataState] = useState<any>(data);
 
   useEffect(() => {
-    const dataToPlotArr = [
-      "avgDiskBytesPerRead",
-      "avgDiskBytesPerTransfer",
-      "avgDiskBytesPerWrite",
-    ];
+    const dataToPlotArr = props.datasetsToPlot;
 
     dataToPlotArr.forEach((item: any) => {
       const redColorAmount = Math.random() * 255;
@@ -64,11 +64,7 @@ const AvgDiskBytesDiagram: React.FC<{
       const blueColorAmount = Math.random() * 255;
 
       const dataSetsLabel =
-        item === "avgDiskBytesPerRead"
-          ? `Mb/read`
-          : item === "avgDiskBytesPerTransfer"
-          ? `Mb/transfer`
-          : `Mb/write`;
+        props.datasetsLabels[dataToPlotArr.findIndex((elem) => elem === item)];
 
       const dataSetIndex: number = datasets.findIndex((dataSetItem: any) => {
         return dataSetItem.label === dataSetsLabel;
@@ -77,7 +73,7 @@ const AvgDiskBytesDiagram: React.FC<{
       if (dataSetIndex < 0) {
         data.datasets.push({
           label: dataSetsLabel,
-          data: [props.avgDiskBytesData[item] / props.dataDivider],
+          data: [props.diskData[item] / props.dataDivider],
           borderColor: `rgb(${redColorAmount}, ${greenColorAmount}, ${blueColorAmount})`,
           backgroundColor: `rgba(${redColorAmount}, ${greenColorAmount}, ${blueColorAmount}, 0.5)`,
         });
@@ -91,7 +87,7 @@ const AvgDiskBytesDiagram: React.FC<{
           previousData.shift();
         }
 
-        previousData.push(props.avgDiskBytesData[item] / props.dataDivider);
+        previousData.push(props.diskData[item] / props.dataDivider);
         const newData: any = datasets;
         newData[dataSetIndex].data = previousData;
 
@@ -106,7 +102,7 @@ const AvgDiskBytesDiagram: React.FC<{
       }
       return labelArray.concat(new Date().toLocaleTimeString());
     });
-  }, [props.avgDiskBytesData]);
+  }, [props.diskData]);
 
   useEffect(() => {
     data.datasets = datasets;
@@ -116,15 +112,12 @@ const AvgDiskBytesDiagram: React.FC<{
   }, [datasets]);
 
   return (
-    <div>
-      <h2 className={classes.label}>
-        Disk {props.avgDiskBytesData.name.replace(":", "")} average size of
-        operations in GB
-      </h2>
+    <div className={classes.diagramContainer}>
+      <h2 className={classes.label}>{props.diagramTitle}</h2>
       {isLoading && <p>Loading</p>}
       {!isLoading && <Line options={options} data={dataState} />}
     </div>
   );
 };
 
-export default AvgDiskBytesDiagram;
+export default DiskPerformanceDiagram;
