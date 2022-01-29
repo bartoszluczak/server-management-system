@@ -21,14 +21,12 @@ const DiskUsage: React.FC = () => {
   );
 
   useEffect(() => {
-    axios
-      .get<DiskDetails[]>("http://localhost:59422/api/systemdetails/storage")
-      .then((res) => {
-        const tempArray: DiskDetails[] = [];
-        res.data.map((diskData) => tempArray.push(diskData));
-        setInstalledDisksList(tempArray);
-        setIsLoading(false);
-      });
+    axios.get<DiskDetails[]>("/systemdetails/storage").then((res) => {
+      const tempArray: DiskDetails[] = [];
+      res.data.map((diskData) => tempArray.push(diskData));
+      setInstalledDisksList(tempArray);
+      setIsLoading(false);
+    });
   }, []);
 
   return (

@@ -49,5 +49,11 @@ namespace ServerManagementSystem.Controllers
             List<NetworkPerformanceDetails> data = _managementService.FetchNetworkPerformanceDetails();
             return data;
         }
+        [HttpGet("storage")]
+        public List<StoragePerformanceDetails> GetStorageDetails()
+        {
+            List<StoragePerformanceDetails> data = _managementService.FetchStoragePerformanceDetails();
+            return data;
+        }
     }
 }

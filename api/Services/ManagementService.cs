@@ -23,6 +23,7 @@ namespace ServerManagementSystem.Services
         private List<ProcessorPerformanceDetails> processorPerformanceDetails;
         private List<SystemPerformanceDetails> systemPerformanceDetails;
         private List<NetworkPerformanceDetails> networkPerformanceDetails;
+        private List<StoragePerformanceDetails> storagePerformanceDetails;
 
         public ManagementService(IConfiguration config)
         {
@@ -39,6 +40,7 @@ namespace ServerManagementSystem.Services
             processorPerformanceDetails = new List<ProcessorPerformanceDetails>();
             systemPerformanceDetails = new List<SystemPerformanceDetails>();
             networkPerformanceDetails = new List<NetworkPerformanceDetails>();
+            storagePerformanceDetails = new List<StoragePerformanceDetails>();
         }
 
         public List<BiosDetails> FetchBiosDetails()
@@ -721,5 +723,54 @@ namespace ServerManagementSystem.Services
             return networkPerformanceDetails;
         }
 
+        public List<StoragePerformanceDetails> FetchStoragePerformanceDetails()
+        {
+            foreach (string servername in serverNames)
+            {
+                // Set up scope for remote server
+                // scope = new ManagementScope($"\\\\{servername}\\root\\CIMV2", connection);
+
+                // Set up scope for local machine - develop
+                ManagementScope scope = new ManagementScope("root\\cimv2");
+
+                scope.Connect();
+
+                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_PerfFormattedData_PerfDisk_LogicalDisk");
+
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+
+                foreach (ManagementObject managementObject in searcher.Get())
+                {
+                    storagePerformanceDetails.Add(new StoragePerformanceDetails()
+                    {
+                        Name = managementObject["Name"] != null ? managementObject["Name"].ToString() : "undefined",
+                        AvgDiskBytesPerRead  = managementObject["AvgDiskBytesPerRead"] != null ? managementObject["AvgDiskBytesPerRead"].ToString() : "undefined",
+                        AvgDiskBytesPerTransfer  = managementObject["AvgDiskBytesPerTransfer"] != null ? managementObject["AvgDiskBytesPerTransfer"].ToString() : "undefined",
+                        AvgDiskBytesPerWrite  = managementObject["AvgDiskBytesPerWrite"] != null ? managementObject["AvgDiskBytesPerWrite"].ToString() : "undefined",
+                        AvgDiskQueueLength  = managementObject["AvgDiskQueueLength"] != null ? managementObject["AvgDiskQueueLength"].ToString() : "undefined",
+                        AvgDiskReadQueueLength  = managementObject["AvgDiskReadQueueLength"] != null ? managementObject["AvgDiskReadQueueLength"].ToString() : "undefined",
+                        AvgDisksecPerRead  = managementObject["AvgDisksecPerRead"] != null ? managementObject["AvgDisksecPerRead"].ToString() : "undefined",
+                        AvgDisksecPerTransfer  = managementObject["AvgDisksecPerTransfer"] != null ? managementObject["AvgDisksecPerTransfer"].ToString() : "undefined",
+                        AvgDisksecPerWrite  = managementObject["AvgDisksecPerWrite"] != null ? managementObject["AvgDisksecPerWrite"].ToString() : "undefined",
+                        AvgDiskWriteQueueLength  = managementObject["AvgDiskWriteQueueLength"] != null ? managementObject["AvgDiskWriteQueueLength"].ToString() : "undefined",
+                        CurrentDiskQueueLength  = managementObject["CurrentDiskQueueLength"] != null ? managementObject["CurrentDiskQueueLength"].ToString() : "undefined",
+                        DiskBytesPersec  = managementObject["DiskBytesPersec"] != null ? managementObject["DiskBytesPersec"].ToString() : "undefined",
+                        DiskReadBytesPersec  = managementObject["DiskReadBytesPersec"] != null ? managementObject["DiskReadBytesPersec"].ToString() : "undefined",
+                        DiskReadsPersec  = managementObject["DiskReadsPersec"] != null ? managementObject["DiskReadsPersec"].ToString() : "undefined",
+                        DiskTransfersPersec  = managementObject["DiskTransfersPersec"] != null ? managementObject["DiskTransfersPersec"].ToString() : "undefined",
+                        DiskWriteBytesPersec  = managementObject["DiskWriteBytesPersec"] != null ? managementObject["DiskWriteBytesPersec"].ToString() : "undefined",
+                        DiskWritesPersec  = managementObject["DiskWritesPersec"] != null ? managementObject["DiskWritesPersec"].ToString() : "undefined",
+                        FreeMegabytes  = managementObject["FreeMegabytes"] != null ? managementObject["FreeMegabytes"].ToString() : "undefined",
+                        PercentDiskReadTime  = managementObject["PercentDiskReadTime"] != null ? managementObject["PercentDiskReadTime"].ToString() : "undefined",
+                        PercentDiskTime  = managementObject["PercentDiskTime"] != null ? managementObject["PercentDiskTime"].ToString() : "undefined",
+                        PercentDiskWriteTime  = managementObject["PercentDiskWriteTime"] != null ? managementObject["PercentDiskWriteTime"].ToString() : "undefined",
+                        PercentFreeSpace  = managementObject["PercentFreeSpace"] != null ? managementObject["PercentFreeSpace"].ToString() : "undefined",
+                        PercentIdleTime  = managementObject["PercentIdleTime"] != null ? managementObject["PercentIdleTime"].ToString() : "undefined",
+                        SplitIOPerSec  = managementObject["SplitIOPerSec"] != null ? managementObject["SplitIOPerSec"].ToString() : "undefined",
+    });
+                }
+            }
+            return storagePerformanceDetails;
+        }
     }
 }

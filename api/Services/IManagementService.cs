@@ -16,5 +16,6 @@ namespace ServerManagementSystem.Services
         public List<ProcessorPerformanceDetails> FetachProcessorPerformanceDetails();
         public List<SystemPerformanceDetails> FetchSystemPerformanceDetails();
         public List<NetworkPerformanceDetails> FetchNetworkPerformanceDetails();
+        public List<StoragePerformanceDetails> FetchStoragePerformanceDetails();
     }
 }
