@@ -19,11 +19,13 @@ namespace ServerManagementSystem.Services
         private List<UpdatesDetails> updatesDetails;
         private List<MotherBoardTempsDetails> motherboardTempsDetails;
         private List<FansDetails> fansDetails;
-        private List<MemoryPerformanceDetails> memoryDetails;
+        private List<MemoryDetals> memoryDetals;
+        private List<MemoryPerformanceDetails> memoryPerformanceDetails;
         private List<ProcessorPerformanceDetails> processorPerformanceDetails;
         private List<SystemPerformanceDetails> systemPerformanceDetails;
         private List<NetworkPerformanceDetails> networkPerformanceDetails;
         private List<StoragePerformanceDetails> storagePerformanceDetails;
+        
 
         public ManagementService(IConfiguration config)
         {
@@ -36,7 +38,8 @@ namespace ServerManagementSystem.Services
             updatesDetails = new List<UpdatesDetails>();
             motherboardTempsDetails = new List<MotherBoardTempsDetails>();
             fansDetails = new List<FansDetails>();
-            memoryDetails = new List<MemoryPerformanceDetails>();
+            memoryDetals = new List<MemoryDetals>();
+            memoryPerformanceDetails = new List<MemoryPerformanceDetails>();
             processorPerformanceDetails = new List<ProcessorPerformanceDetails>();
             systemPerformanceDetails = new List<SystemPerformanceDetails>();
             networkPerformanceDetails = new List<NetworkPerformanceDetails>();
@@ -207,6 +210,9 @@ namespace ServerManagementSystem.Services
 
                 foreach (ManagementObject managementObject in searcher.Get())
                 {
+        
+                    var size = managementObject["TotalPhysicalMemory"].ToString();
+                    var totalMemory = Math.Round(double.Parse(size) / (1024 * 1024 * 1024), 2).ToString();
 
                     var adminPasswordStatus = managementObject["AdminPasswordStatus"] != null ? managementObject["AdminPasswordStatus"].ToString() : "undefined";
                     var automaticManagedPagefile = managementObject["AutomaticManagedPagefile"] != null ? managementObject["AutomaticManagedPagefile"].ToString() : "undefined";
@@ -268,7 +274,7 @@ namespace ServerManagementSystem.Services
                     var systemStartupSetting = managementObject["SystemStartupSetting"] != null ? managementObject["SystemStartupSetting"].ToString() : "undefined";
                     var systemType = managementObject["SystemType"] != null ? managementObject["SystemType"].ToString() : "undefined";
                     var thermalState = managementObject["ThermalState"] != null ? managementObject["ThermalState"].ToString() : "undefined";
-                    var totalPhysicalMemory = managementObject["TotalPhysicalMemory"] != null ? managementObject["TotalPhysicalMemory"].ToString() : "undefined";
+                    var totalPhysicalMemory = totalMemory != null ? totalMemory : "undefined";
                     var userName = managementObject["UserName"] != null ? managementObject["UserName"].ToString() : "undefined";
                     var wakeUpType = managementObject["WakeUpType"] != null ? managementObject["WakeUpType"].ToString() : "undefined";
                     var workgroup = managementObject["Workgroup"] != null ? managementObject["Workgroup"].ToString() : "undefined";
@@ -528,6 +534,54 @@ namespace ServerManagementSystem.Services
 
         }
 
+        public List<MemoryDetals> FetchMemoryDetails()
+        {
+            foreach (string servername in serverNames)
+            {
+                // Set up scope for remote server
+                // scope = new ManagementScope($"\\\\{servername}\\root\\CIMV2", connection);
+
+                // Set up scope for local machine - develop
+                ManagementScope scope = new ManagementScope("root\\cimv2");
+
+                scope.Connect();
+
+                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_PhysicalMemory");
+
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+
+                foreach (ManagementObject managementObject in searcher.Get())
+                {
+                    var size = managementObject["Capacity"].ToString();
+                    var capacity = Math.Round(double.Parse(size) / (1024 * 1024 * 1024), 2).ToString();
+                    memoryDetals.Add(new MemoryDetals()
+                    {
+                        Caption = managementObject["Caption"] != null ? managementObject["Caption"].ToString() : "undefined",
+                        Description = managementObject["Description"] != null ? managementObject["Description"].ToString() : "undefined",
+                        Name = managementObject["Name"] != null ? managementObject["Name"].ToString() : "undefined",
+                        Manufacturer = managementObject["Manufacturer"] != null ? managementObject["Manufacturer"].ToString() : "undefined",
+                        PartNumber = managementObject["PartNumber"] != null ? managementObject["PartNumber"].ToString() : "undefined",
+                        SerialNumber = managementObject["SerialNumber"] != null ? managementObject["SerialNumber"].ToString() : "undefined",
+                        Tag = managementObject["Tag"] != null ? managementObject["Tag"].ToString() : "undefined",
+                        FormFactor = managementObject["FormFactor"] != null ? managementObject["FormFactor"].ToString() : "undefined",
+                        BankLabel = managementObject["BankLabel"] != null ? managementObject["BankLabel"].ToString() : "undefined",
+                        Capacity = capacity != null ? capacity : "undefined",
+                        DataWidth = managementObject["DataWidth"] != null ? managementObject["DataWidth"].ToString() : "undefined",
+                        InterleavePosition = managementObject["InterleavePosition"] != null ? managementObject["InterleavePosition"].ToString() : "undefined",
+                        MemoryType = managementObject["MemoryType"] != null ? managementObject["MemoryType"].ToString() : "undefined",
+                        Speed = managementObject["Speed"] != null ? managementObject["Speed"].ToString() : "undefined",
+                        TotalWidth = managementObject["TotalWidth"] != null ? managementObject["TotalWidth"].ToString() : "undefined",
+                        Attributes = managementObject["Attributes"] != null ? managementObject["Attributes"].ToString() : "undefined",
+                        DeviceLocator = managementObject["DeviceLocator"] != null ? managementObject["DeviceLocator"].ToString() : "undefined",
+                        InterleaveDataDepth = managementObject["InterleaveDataDepth"] != null ? managementObject["InterleaveDataDepth"].ToString() : "undefined",
+                        SMBIOSMemoryType = managementObject["SMBIOSMemoryType"] != null ? managementObject["SMBIOSMemoryType"].ToString() : "undefined",
+                        TypeDetail = managementObject["TypeDetail"] != null ? managementObject["TypeDetail"].ToString() : "undefined",
+                    });
+                }
+            }
+            return memoryDetals;
+        }
+
         public List<MemoryPerformanceDetails> FetachMemoryPerformanceDetails()
         {
             foreach (string servername in serverNames)
@@ -546,7 +600,7 @@ namespace ServerManagementSystem.Services
 
                 foreach (ManagementObject managementObject in searcher.Get())
                 {
-                    memoryDetails.Add(new MemoryPerformanceDetails()
+                    memoryPerformanceDetails.Add(new MemoryPerformanceDetails()
                     {
                         AvailableBytes = managementObject["AvailableBytes"] != null ? managementObject["AvailableBytes"].ToString() : "undefined",
                         AvailableKBytes = managementObject["AvailableKBytes"] != null ? managementObject["AvailableKBytes"].ToString() : "undefined",
@@ -589,7 +643,7 @@ namespace ServerManagementSystem.Services
 
                 }
             }
-            return memoryDetails;
+            return memoryPerformanceDetails;
         }
 
         public List<ProcessorPerformanceDetails> FetachProcessorPerformanceDetails()
@@ -616,6 +670,7 @@ namespace ServerManagementSystem.Services
                         C2TransitionsPersec = managementObject["C2TransitionsPersec"] != null ? managementObject["C2TransitionsPersec"].ToString() : "undefined",
                         C3TransitionsPersec = managementObject["C3TransitionsPersec"] != null ? managementObject["C3TransitionsPersec"].ToString() : "undefined",
                         DPCRate = managementObject["DPCRate"] != null ? managementObject["DPCRate"].ToString() : "undefined",
+                        Name = managementObject["Name"] != null ? managementObject["Name"].ToString() : "undefined",
                         DPCsQueuedPersec = managementObject["DPCsQueuedPersec"] != null ? managementObject["DPCsQueuedPersec"].ToString() : "undefined",
                         InterruptsPersec = managementObject["InterruptsPersec"] != null ? managementObject["InterruptsPersec"].ToString() : "undefined",
                         PercentC1Time = managementObject["PercentC1Time"] != null ? managementObject["PercentC1Time"].ToString() : "undefined",

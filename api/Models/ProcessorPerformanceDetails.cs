@@ -10,6 +10,7 @@ namespace ServerManagementSystem.Models
         public string C1TransitionsPersec { get; set; }
         public string C2TransitionsPersec { get; set; }
         public string C3TransitionsPersec { get; set; }
+        public string Name { get; set; }  
         public string DPCRate { get; set; }
         public string DPCsQueuedPersec { get; set; }
         public string InterruptsPersec { get; set; }

@@ -1,19 +1,34 @@
 .sidebar {
     display: flex;
     width: 30%;
-    max-width: 350px;
+    max-width: 250px;
     height: calc(100vh - 80px);
     /*display: block;*/
     margin: 0;
     padding: 30px;
     background-color: rgb(29, 30, 31);
+    transition: 0.3s;
+    z-index: 10000;
+    position: absolute;
+}
+
+.sidebarNarrow {
+    width: 40px !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: absolute;
 }
 
 .sidebarHeader {
     width: 100%;
     border-bottom: 1px solid #809096;
-    display: inline;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
     height: min-content;
+    align-items: center;
+    align-content: center;
 }
 
 .sidebarHeader h3 {
@@ -22,4 +37,20 @@
     margin: 0;
     padding: 0;
     padding-bottom: 5px;
+    transition: 0.3s;
+}
+
+.menuIcon {
+    font-size: 25px;
+    color: #a7aaad;
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    margin-bottom: 5px;
+    font-weight: lighter;
+    transition: 0.3s;
+}
+
+.menuIcon:hover {
+    color: #367fac;
 }

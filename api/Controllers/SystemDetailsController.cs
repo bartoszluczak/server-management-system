@@ -71,5 +71,12 @@ namespace ServerManagementSystem.Controllers
             List<FansDetails> data = _managementService.FetchFansDetails();
             return data;
         }
+
+        [HttpGet("memory")]
+        public List<MemoryDetals> GetMemoryDetails()
+        {
+            List<MemoryDetals> data = _managementService.FetchMemoryDetails();
+            return data;
+        }
     }
 }

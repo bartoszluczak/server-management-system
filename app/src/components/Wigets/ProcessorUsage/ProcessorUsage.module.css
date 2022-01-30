@@ -1,0 +1,17 @@
+.widgetHeader {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    min-width: 300px;
+}
+
+.processorWidget {
+    border-top: 1px solid #809096;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

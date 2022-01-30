@@ -1,0 +1,36 @@
+.key {
+    font-size: 16px !important;
+    font-weight: lighter;
+    color: #367fac !important;
+    padding-left: 0 !important;
+    margin-bottom: 5px;
+    display: inline;
+    margin-right: 10px;
+    text-transform: capitalize;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    color: #a7aaad;
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+}
+
+.divider {
+    border-top: 1px solid #809096;
+    width: 80% !important;
+    height: 1px !important;
+    display: block !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.divider:last-of-type {
+    border-top: 1px solid rgba(128, 144, 150, 0);
+}
