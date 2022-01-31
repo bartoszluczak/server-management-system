@@ -153,7 +153,6 @@ const FreeSpaceLineDiagram: React.FC = () => {
 
   return (
     <Fragment>
-      <h2 className={classes.label}>Disks free space diagram</h2>
       {isLoading && <p>Loading</p>}
       {!isLoading && <Line options={options} data={data} />}
     </Fragment>

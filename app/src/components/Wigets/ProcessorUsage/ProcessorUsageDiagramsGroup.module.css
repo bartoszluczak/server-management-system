@@ -4,3 +4,28 @@
     color: #367fac !important;
     padding-left: 0 !important;
 }
+
+.plotsGrid {
+    display: grid;
+    max-width: 50%;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.diagramContainer {
+    border-bottom: 1px solid #809096;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.diagramContainer:last-of-type {
+    border-bottom: 0 solid #809096;
+}
+
+.plotHeaderContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    margin-bottom: 10px;
+}

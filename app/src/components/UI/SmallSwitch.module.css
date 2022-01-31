@@ -1,0 +1,47 @@
+.switchContainer {
+    background-color: rgba(128, 144, 150, 0);
+    border: 1px solid rgba(167, 170, 173, 0.4);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    justify-content: space-between;
+    z-index: 1;
+    position: relative;
+    padding-right: 7px;
+    transition: 0.3s;
+}
+
+.icon {
+    font-size: 14px !important;
+    height: 10px;
+    padding: 1px;
+    left: -5px;
+    position: relative;
+    margin-right: 2px;
+    color: #24262a !important;
+    transition: 0.3s;
+}
+
+.currentState {
+    display: block;
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background-color: rgba(208, 223, 238, 0.8);
+    border-radius: 15px;
+    z-index: -1;
+    transition: 500ms;
+    left: 0;
+}
+.left {
+    left: 47%;
+}
+
+.switchContainerActive {
+    background-color: rgba(54, 127, 172, 0.8) !important;
+    border: 1px solid rgba(167, 170, 173, 0);
+}

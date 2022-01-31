@@ -1,9 +1,7 @@
 .diskWidget {
     border-top: 1px solid #809096;
     margin-top: 10px;
-    /*margin-bottom: 10px;*/
-    padding-top: 10px;
-    /*padding-bottom: 10px;*/
+    min-width: 300px;
 }
 
 .label {
@@ -16,8 +14,26 @@
 .diagramGroupContainer {
     display: flex;
     flex-direction: row;
-    border-top: 1px solid #809096;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 10px;
+}
+
+.plotOuterDiagramContainer {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #809096;
+}
+
+.plotOuterDiagramContainer:first-of-type {
+    border-top: 0 !important;
+}
+
+.plotHeaderContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

@@ -3,10 +3,12 @@
     border-radius: 5px;
     display: block;
     padding: 15px;
+    padding-bottom: 0;
     width: min-content;
     height: min-content;
     border: 1px solid rgba(214, 229, 244, 0.3);
     margin: 10px;
+    transition: 0.5s;
 }
 .container h1 {
     font-size: 26px;
