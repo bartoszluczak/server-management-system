@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using ServerManagementSystem.Models;
 using ServerManagementSystem.Services;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace ServerManagementSystem.Controllers
 {
@@ -76,6 +78,15 @@ namespace ServerManagementSystem.Controllers
         public List<MemoryDetals> GetMemoryDetails()
         {
             List<MemoryDetals> data = _managementService.FetchMemoryDetails();
+            return data;
+        }
+
+        [HttpGet("bios-redis")]
+        public string  GetBiosRedis()
+        {
+            string data = _managementService.FetchBiosDetailsRedis();
+            //var jsonObj = JsonSerializer.Deserialize(data);
+            Console.WriteLine(data);
             return data;
         }
     }

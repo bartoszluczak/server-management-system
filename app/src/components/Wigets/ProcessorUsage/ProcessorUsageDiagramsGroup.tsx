@@ -54,12 +54,10 @@ const ProcessorUsageDiagramsGroup: React.FC<{
   const switchStateHandler = (switchState: any) => {
     if (switchState.total) {
       switchState.setStatusFunction(switchState.switchState);
-      // setDisplayTotalPlot(switchState.switchState);
       setTotalPlotData([]);
       setPlotData([]);
     } else {
       switchState.setStatusFunction(switchState.switchState);
-      // setDisplaySinglesPlot(switchState.switchState);
       setSingleCorePlotData([]);
       setPlotData([]);
     }

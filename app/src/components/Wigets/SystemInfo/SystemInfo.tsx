@@ -3,6 +3,8 @@ import WidgetContainer from "../../UI/WidgetContainer";
 import classes from "./SystemInfo.module.css";
 import SystemInfoItem from "./SystemInfoItem";
 import axios from "axios";
+import { log } from "util";
+import { isAllOf } from "@reduxjs/toolkit";
 
 const SystemInfo: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -72,11 +74,25 @@ const SystemInfo: React.FC = () => {
     });
   };
 
+  const getRedisData = () => {
+    axios.get<any>(`/systemdetails/bios-redis`).then((res: any) => {
+      const dataObject: any = {};
+
+      res.data.forEach((item: any) => {
+        const tempArr = item.split(":");
+        dataObject[`${tempArr[0]}`] = tempArr[1];
+      });
+
+      console.log(dataObject);
+    });
+  };
+
   useEffect(() => {
     getDetailsData("computersystem", setComputerSystemData);
     getDetailsData("processor", setProcesorData);
     getDetailsData("bios", setBiosData);
     getDetailsData("memory", setMemoryData);
+    getRedisData();
   }, []);
 
   return (

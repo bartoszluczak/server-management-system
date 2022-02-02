@@ -1,4 +1,5 @@
 ﻿using ServerManagementSystem.Models;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace ServerManagementSystem.Services
         public List<SystemPerformanceDetails> FetchSystemPerformanceDetails();
         public List<NetworkPerformanceDetails> FetchNetworkPerformanceDetails();
         public List<StoragePerformanceDetails> FetchStoragePerformanceDetails();
-        
+        public string FetchBiosDetailsRedis();
+
+
     }
 }
