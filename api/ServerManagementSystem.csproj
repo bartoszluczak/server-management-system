@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.3.3" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.3.3" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
     <PackageReference Include="System.Management" Version="6.0.2-mauipre.1.22054.8" />
   </ItemGroup>
