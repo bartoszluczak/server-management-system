@@ -25,11 +25,13 @@ namespace ServerManagementSystem
         }
 
         public IConfiguration Configuration { get; }
-
+        private ConnectionMultiplexer _redis;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<RedisService>();
+
             services.Configure<QuartzOptions>(Configuration.GetSection("Quartz"));
 
             services.AddQuartz(q => {
@@ -40,19 +42,25 @@ namespace ServerManagementSystem
                 {
                     tp.MaxConcurrency = 10;
                 });
-
-
-                q.ScheduleJob<SimpleJob>(trigger => trigger
-                .WithIdentity("Test")
-                .StartNow()
-                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
-                .RepeatForever())); 
                 
-                q.ScheduleJob<BiosDetailsUpdate>(trigger => trigger
-                .WithIdentity("BiosDetails")
+                //q.ScheduleJob<BiosDetailsUpdate>(trigger => trigger
+                //.WithIdentity("BiosDetails")
+                //.StartNow()
+                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                //.RepeatForever()));
+                
+                //q.ScheduleJob<MemoryDetailsUpdate>(trigger => trigger
+                //.WithIdentity("MemoryDetails")
+                //.StartNow()
+                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                //.RepeatForever()));
+                
+                q.ScheduleJob<ProcessorDetailsUpdate>(trigger => trigger
+                .WithIdentity("ProcessorDetails")
                 .StartNow()
                 .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
                 .RepeatForever()));
+          
 
             });
 
@@ -96,10 +104,26 @@ namespace ServerManagementSystem
 
             app.UseAuthorization();
 
+            ServerStartTime();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            
+        }
+
+        public void ServerStartTime()
+        {
+            var connectionURL = Configuration.GetValue<string>("RedisDB:connectionURL");
+            var connectionPort = Configuration.GetValue<string>("RedisDB:connectionPort");
+            var dbPassword = Configuration.GetValue<string>("RedisDB:dbPassword");
+            _redis = ConnectionMultiplexer.Connect($"{connectionURL}:{connectionPort}, password={dbPassword}");
+            var time = DateTime.Now.ToString();
+            var db = _redis.GetDatabase();
+            db.StringSet("serverStartTime", time);
+            _redis.Close();
         }
     }
 }

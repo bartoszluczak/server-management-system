@@ -15,6 +15,9 @@ namespace ServerManagementSystem.Services
     {
         private IConfiguration _config;
         private List<string> serverNames;
+        private readonly RedisService _redisServie;
+
+
         private List<StorageDetails> storageDetailsList;
         private List<BiosDetails> biosDetailsList;
         private List<ProcessorDetails> processorDetails;
@@ -22,7 +25,7 @@ namespace ServerManagementSystem.Services
         private List<UpdatesDetails> updatesDetails;
         private List<MotherBoardTempsDetails> motherboardTempsDetails;
         private List<FansDetails> fansDetails;
-        private List<MemoryDetals> memoryDetals;
+        private List<MemoryDetails> memoryDetals;
         private List<MemoryPerformanceDetails> memoryPerformanceDetails;
         private List<ProcessorPerformanceDetails> processorPerformanceDetails;
         private List<SystemPerformanceDetails> systemPerformanceDetails;
@@ -31,10 +34,13 @@ namespace ServerManagementSystem.Services
 
         static readonly ConnectionMultiplexer _redis = ConnectionMultiplexer.Connect("localhost:6379, password=default");
         
-        public ManagementService(IConfiguration config)
+        public ManagementService(IConfiguration config, RedisService redisService)
         {
             _config = config;
             serverNames = _config.GetSection("ServerNames").Get<string[]>().ToList();
+            _redisServie = redisService;
+
+
             storageDetailsList = new List<StorageDetails>();
             biosDetailsList = new List<BiosDetails>();
             processorDetails = new List<ProcessorDetails>();
@@ -42,12 +48,19 @@ namespace ServerManagementSystem.Services
             updatesDetails = new List<UpdatesDetails>();
             motherboardTempsDetails = new List<MotherBoardTempsDetails>();
             fansDetails = new List<FansDetails>();
-            memoryDetals = new List<MemoryDetals>();
+            memoryDetals = new List<MemoryDetails>();
             memoryPerformanceDetails = new List<MemoryPerformanceDetails>();
             processorPerformanceDetails = new List<ProcessorPerformanceDetails>();
             systemPerformanceDetails = new List<SystemPerformanceDetails>();
             networkPerformanceDetails = new List<NetworkPerformanceDetails>();
             storagePerformanceDetails = new List<StoragePerformanceDetails>();
+        }
+
+        public void ServerStartTime ()
+        {
+            var time = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
+            var db = _redis.GetDatabase();
+            db.SetAdd("serverStartTime", time);
         }
 
         public List<BiosDetails> FetchBiosDetails()
@@ -162,26 +175,9 @@ namespace ServerManagementSystem.Services
 
         public string FetchBiosDetailsRedis()
         {
-            var db = _redis.GetDatabase();
-            var res = db.ListGetByIndex("bios", 0);
-
-            Console.WriteLine(res);
-            //List<string> listKeys = new List<string>();
-            //var keys = _redis.GetServer("localhost", 6379).Keys();
-            //listKeys.AddRange(keys.Select(key => (string)key).ToList());
-
-            //List<string> biosDetailsRedis = new List<string>();
-
-
-            //var resp = db.HashGetAll(listKeys.Last());
-
-            //foreach (var key in resp)
-            //{
-            //    biosDetailsRedis.Add(key.ToString());
-            //}
-
-            ////Console.WriteLine(resp);
-
+            var db = _redisServie.Connect().GetDatabase();
+            var res = db.ListGetByIndex("biosData", -1);
+            _redisServie.Disconnect();
             return res;
         }
 
@@ -614,7 +610,7 @@ namespace ServerManagementSystem.Services
 
         }
 
-        public List<MemoryDetals> FetchMemoryDetails()
+        public List<MemoryDetails> FetchMemoryDetails()
         {
             foreach (string servername in serverNames)
             {
@@ -634,7 +630,7 @@ namespace ServerManagementSystem.Services
                 {
                     var size = managementObject["Capacity"].ToString();
                     var capacity = Math.Round(double.Parse(size) / (1024 * 1024 * 1024), 2).ToString();
-                    memoryDetals.Add(new MemoryDetals()
+                    memoryDetals.Add(new MemoryDetails()
                     {
                         Caption = managementObject["Caption"] != null ? managementObject["Caption"].ToString() : "undefined",
                         Description = managementObject["Description"] != null ? managementObject["Description"].ToString() : "undefined",

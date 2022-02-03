@@ -16,12 +16,14 @@ namespace ServerManagementSystem.Controllers
     public class SystemDetailsController : ControllerBase
     {
         private static IConfiguration _config;
+        private readonly RedisService _redisServie;
 
         private readonly ManagementService _managementService;
-        public SystemDetailsController(ManagementService managementService, IConfiguration config)
+        public SystemDetailsController(ManagementService managementService, IConfiguration config, RedisService redisService)
         {
             _managementService = managementService;
             _config = config;
+            _redisServie = redisService;
         }
 
         [HttpGet("bios")]
@@ -75,19 +77,68 @@ namespace ServerManagementSystem.Controllers
         }
 
         [HttpGet("memory")]
-        public List<MemoryDetals> GetMemoryDetails()
+        public List<MemoryDetails> GetMemoryDetails()
         {
-            List<MemoryDetals> data = _managementService.FetchMemoryDetails();
+            List<MemoryDetails> data = _managementService.FetchMemoryDetails();
             return data;
         }
 
-        [HttpGet("bios-redis")]
-        public string  GetBiosRedis()
+        /// Redis return methods
+
+        [HttpGet("redis/bios")]
+        public IActionResult  GetBiosRedis()
         {
-            string data = _managementService.FetchBiosDetailsRedis();
-            //var jsonObj = JsonSerializer.Deserialize(data);
-            Console.WriteLine(data);
-            return data;
+            var data = _redisServie.FetchData("biosData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        }
+        
+        [HttpGet("redis/memory")]
+        public IActionResult  GetMemoryRedis()
+        {
+            var data = _redisServie.FetchData("memoryData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        }
+        
+        [HttpGet("redis/processor")]
+        public IActionResult GetProcessorRedis()
+        {
+            var data = _redisServie.FetchData("processorData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        }
+        
+        [HttpGet("redis/computersystem")]
+        public IActionResult GetComputerSystemRedis()
+        {
+            var data = _redisServie.FetchData("computerSystemData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        }
+        
+        [HttpGet("redis/updates")]
+        public IActionResult GetUpdatesRedis()
+        {
+            var data = _redisServie.FetchData("updatesData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        }
+        
+        [HttpGet("redis/storage")]
+        public IActionResult GetStorageRedis()
+        {
+            var data = _redisServie.FetchData("storageData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        }
+        
+        [HttpGet("redis/motherboardtemps")]
+        public IActionResult GetMotherboardTempsRedis()
+        {
+            var data = _redisServie.FetchData("motherboardtempsData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        }
+        
+        [HttpGet("redis/casefans")]
+        public IActionResult GetCaseFansRedis()
+        {
+            var data = _redisServie.FetchData("casefansData", -1);
+            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
     }
 }

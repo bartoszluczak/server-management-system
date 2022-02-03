@@ -1,6 +1,6 @@
 ﻿namespace ServerManagementSystem.Models
 {
-    public class MemoryDetals
+    public class MemoryDetails
     {
         public string Caption { get; set; }
         public string Description { get; set; }

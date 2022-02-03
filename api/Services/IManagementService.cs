@@ -12,7 +12,7 @@ namespace ServerManagementSystem.Services
         public List<BiosDetails> FetchBiosDetails();
         public List<ProcessorDetails> FetchProcessorDetails();
         public List<StorageDetails> FetchStorageData();
-        public List<MemoryDetals> FetchMemoryDetails();
+        public List<MemoryDetails> FetchMemoryDetails();
         public List<MotherBoardTempsDetails> FetchMotherboardTempsData();
         public List<MemoryPerformanceDetails> FetachMemoryPerformanceDetails();
         public List<ProcessorPerformanceDetails> FetachProcessorPerformanceDetails();
