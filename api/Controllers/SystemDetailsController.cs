@@ -26,6 +26,19 @@ namespace ServerManagementSystem.Controllers
             _redisServie = redisService;
         }
 
+        [HttpGet("isactive")]
+        public IActionResult GetIsActive()
+        {
+            string data = _managementService.IsActive();
+
+            if (data == null | data == "Server is inactive")
+            {
+                return BadRequest("Server is not runnig!");
+            }
+
+            return Ok("Server is active!");
+        }
+
         [HttpGet("bios")]
         public List<BiosDetails> GetBiosDetails()
         {
@@ -117,6 +130,7 @@ namespace ServerManagementSystem.Controllers
         public IActionResult GetUpdatesRedis()
         {
             var data = _redisServie.FetchData("updatesData", -1);
+            //var data = _redisServie.FetchList("updatesData", 0, -1);
             return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         

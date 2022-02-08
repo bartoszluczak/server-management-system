@@ -42,21 +42,39 @@ namespace ServerManagementSystem
                 {
                     tp.MaxConcurrency = 10;
                 });
-                
-                //q.ScheduleJob<BiosDetailsUpdate>(trigger => trigger
-                //.WithIdentity("BiosDetails")
-                //.StartNow()
-                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
-                //.RepeatForever()));
-                
-                //q.ScheduleJob<MemoryDetailsUpdate>(trigger => trigger
-                //.WithIdentity("MemoryDetails")
-                //.StartNow()
-                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
-                //.RepeatForever()));
-                
+
+                q.ScheduleJob<BiosDetailsUpdate>(trigger => trigger
+                .WithIdentity("BiosDetails")
+                .StartNow()
+                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                .RepeatForever()));
+
+                q.ScheduleJob<MemoryDetailsUpdate>(trigger => trigger
+                .WithIdentity("MemoryDetails")
+                .StartNow()
+                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                .RepeatForever()));
+
                 q.ScheduleJob<ProcessorDetailsUpdate>(trigger => trigger
                 .WithIdentity("ProcessorDetails")
+                .StartNow()
+                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                .RepeatForever()));
+                
+                q.ScheduleJob<ComputerSystemDetailsUpdate>(trigger => trigger
+                .WithIdentity("ComputerSystemDetails")
+                .StartNow()
+                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                .RepeatForever()));
+                
+                q.ScheduleJob<UpdatesDetailsUpdate>(trigger => trigger
+                .WithIdentity("UpdatesDetails")
+                .StartNow()
+                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                .RepeatForever()));
+                
+                q.ScheduleJob<StorageDetailsUpdate>(trigger => trigger
+                .WithIdentity("StorageDetails")
                 .StartNow()
                 .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
                 .RepeatForever()));

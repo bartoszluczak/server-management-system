@@ -35,10 +35,16 @@ namespace ServerManagementSystem.Services
             var db = _redis.GetDatabase();
             var res = db.ListGetByIndex(dataFieldName, index);
 
-            //if (res.IsNullOrEmpty)
-            //{
-                
-            //}
+            var data = JsonSerializer.Deserialize<RedisDataModel>(res);
+            Disconnect();
+            return data;
+        }
+
+        public RedisDataModel FetchList(string dataFieldName, int startIndex, int endIndex)
+        {
+            Connect();
+            var db = _redis.GetDatabase();
+            var res = db.ListRange(dataFieldName, startIndex, endIndex).ToString();
 
             var data = JsonSerializer.Deserialize<RedisDataModel>(res);
             Disconnect();

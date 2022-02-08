@@ -63,6 +63,15 @@ namespace ServerManagementSystem.Services
             db.SetAdd("serverStartTime", time);
         }
 
+        public string IsActive()
+        {
+            var db = _redis.GetDatabase();
+            var startingTime = db.StringGet("serverStartTime");
+
+            return startingTime.ToString().Length > 0 ? "Server is active" : "Server is inactive";
+
+        }
+
         public List<BiosDetails> FetchBiosDetails()
         {
             var db = _redis.GetDatabase();
@@ -173,13 +182,13 @@ namespace ServerManagementSystem.Services
             return biosDetailsList;
         }
 
-        public string FetchBiosDetailsRedis()
-        {
-            var db = _redisServie.Connect().GetDatabase();
-            var res = db.ListGetByIndex("biosData", -1);
-            _redisServie.Disconnect();
-            return res;
-        }
+        //public string FetchBiosDetailsRedis()
+        //{
+        //    var db = _redisServie.Connect().GetDatabase();
+        //    var res = db.ListGetByIndex("biosData", -1);
+        //    _redisServie.Disconnect();
+        //    return res;
+        //}
 
         public List<ProcessorDetails> FetchProcessorDetails()
         {
@@ -461,16 +470,14 @@ namespace ServerManagementSystem.Services
 
                     updatesDetails.Add(new UpdatesDetails()
                     {
-                        Caption = caption,
                         InstallDate = installDate,
                         Name = name,
                         Status = status,
-                        CSName = csName,
                         FixComments =fixComments,
                         Description = desciption,
                         HotFixID = hotFixID,
-                        InstaledBy = instaledBy,
-                        InstaledOn = instaledOn,
+                        InstalledBy = instaledBy,
+                        InstalledOn = instaledOn,
                         ServicePackInEffect = servicePackInEffect
                     });
                 }

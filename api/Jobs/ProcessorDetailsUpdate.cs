@@ -20,13 +20,16 @@ namespace ServerManagementSystem.Jobs
         private List<string> serverNames;
         private PropertyInfo[] ProcessorDetailsProperties;
         private List<ProcessorDetails> processorDetailsList;
-        
-        public ProcessorDetailsUpdate(IConfiguration iconfig, RedisService redisService)
+
+        private readonly ManagementService _managementService;
+
+        public ProcessorDetailsUpdate(IConfiguration iconfig, RedisService redisService, ManagementService managementService)
         {
             _configuration = iconfig;
             _redisServie = redisService;
             serverNames = _configuration.GetSection("ServerNames").Get<string[]>().ToList();
             processorDetailsList = new List<ProcessorDetails>();
+            _managementService = managementService;
         } 
         //static readonly ConnectionMultiplexer 
         public async Task Execute(IJobExecutionContext context)
@@ -34,37 +37,39 @@ namespace ServerManagementSystem.Jobs
             var db = _redisServie.Connect().GetDatabase();
             var res = db.ListGetByIndex("processorData", -1);
 
-            foreach (string servername in serverNames)
-            {
-                // Set up scope for remote server
-                // scope = new ManagementScope($"\\\\{servername}\\root\\CIMV2", connection);
+            processorDetailsList = _managementService.FetchProcessorDetails();
 
-                // Set up scope for local machine - develop
-                ManagementScope scope = new ManagementScope("root\\cimv2");
+            //foreach (string servername in serverNames)
+            //{
+            //    // Set up scope for remote server
+            //    // scope = new ManagementScope($"\\\\{servername}\\root\\CIMV2", connection);
 
-                scope.Connect();
+            //    // Set up scope for local machine - develop
+            //    ManagementScope scope = new ManagementScope("root\\cimv2");
 
-                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_Processor");
+            //    scope.Connect();
 
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+            //    ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_Processor");
 
-                ProcessorDetails processorDetails = new ProcessorDetails();
+            //    ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
 
-                foreach (ManagementObject managementObject in searcher.Get())
-                {
-                    ProcessorDetailsProperties = Type.GetType("ServerManagementSystem.Models.ProcessorDetails").GetProperties();
+            //    ProcessorDetails processorDetails = new ProcessorDetails();
 
-                    for (int i = 0; i < ProcessorDetailsProperties.Length; i++)
-                    {
-                        var currentProperty = ProcessorDetailsProperties[i].Name.ToString();
-                        var currentValue = managementObject[currentProperty] != null ? managementObject[currentProperty].ToString() : "undefined";
-                        processorDetails.GetType().GetProperty(currentProperty).SetValue(processorDetails, currentValue, null);
-                    }
-                }
-                processorDetailsList.Add(processorDetails);
+            //    foreach (ManagementObject managementObject in searcher.Get())
+            //    {
+            //        ProcessorDetailsProperties = Type.GetType("ServerManagementSystem.Models.ProcessorDetails").GetProperties();
 
-            }
-                    
+            //        for (int i = 0; i < ProcessorDetailsProperties.Length; i++)
+            //        {
+            //            var currentProperty = ProcessorDetailsProperties[i].Name.ToString();
+            //            var currentValue = managementObject[currentProperty] != null ? managementObject[currentProperty].ToString() : "undefined";
+            //            processorDetails.GetType().GetProperty(currentProperty).SetValue(processorDetails, currentValue, null);
+            //        }
+            //    }
+            //    processorDetailsList.Add(processorDetails);
+
+            //}
+
 
             var time = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
             var obj = new RedisDataModel
