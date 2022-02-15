@@ -92,44 +92,6 @@ namespace ServerManagementSystem.Services
 
                 foreach (ManagementObject managementObject in searcher.Get())
                 {
-                    //var time = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
-                    //    new HashEntry("BiosCharacteristics", managementObject["BiosCharacteristics"] != null ? managementObject["BiosCharacteristics"].ToString() : "undefined"),
-                    //    new HashEntry("BIOSVersion",  managementObject["BIOSVersion"] != null ? managementObject["BIOSVersion"].ToString() : "undefined"),
-                    //    new HashEntry("BuildNumber", managementObject["BuildNumber"] != null ? managementObject["BuildNumber"].ToString() : "undefined"),
-                    //    new HashEntry("Caption", managementObject["Caption"] != null ? managementObject["Caption"].ToString() : "undefined"),
-                    //    new HashEntry("CodeSet", managementObject["CodeSet"] != null ? managementObject["CodeSet"].ToString() : "undefined"),
-                    //    new HashEntry("CodeSet", managementObject["CodeSet"] != null ? managementObject["CodeSet"].ToString() : "undefined"),
-                    //    new HashEntry("CodeSet", managementObject["CodeSet"] != null ? managementObject["CodeSet"].ToString() : "undefined"),
-                    //    new HashEntry("CurrentLanguage", managementObject["CurrentLanguage"] != null ? managementObject["CurrentLanguage"].ToString() : "undefined"),
-                    //    new HashEntry("Description", managementObject["Description"] != null ? managementObject["Description"].ToString() : "undefined"),
-                    //    new HashEntry("EmbeddedControllerMajorVersion", managementObject["EmbeddedControllerMajorVersion"] != null ? managementObject["EmbeddedControllerMajorVersion"].ToString() : "undefined"),
-                    //    new HashEntry("EmbeddedControllerMinorVersion", managementObject["EmbeddedControllerMinorVersion"] != null ? managementObject["EmbeddedControllerMinorVersion"].ToString() : "undefined"),
-                    //    new HashEntry("IdentificationCode", managementObject["IdentificationCode"] != null ? managementObject["IdentificationCode"].ToString() : "undefined"),
-                    //    new HashEntry("InstallableLanguages", managementObject["InstallableLanguages"] != null ? managementObject["InstallableLanguages"].ToString() : "undefined"),
-                    //    new HashEntry("InstallDate", managementObject["InstallDate"] != null ? managementObject["InstallDate"].ToString() : "undefined"),
-                    //    new HashEntry("LanguageEdition", managementObject["LanguageEdition"] != null ? managementObject["LanguageEdition"].ToString() : "undefined"),
-                    //    new HashEntry("ListOfLanguages", managementObject["ListOfLanguages"] != null ? managementObject["ListOfLanguages"].ToString() : "undefined"),
-                    //    new HashEntry("Manufacturer", managementObject["Manufacturer"] != null ? managementObject["Manufacturer"].ToString() : "undefined"),
-                    //    new HashEntry("Name", managementObject["Name"] != null ? managementObject["Name"].ToString() : "undefined"),
-                    //    new HashEntry("OtherTargetOS", managementObject["OtherTargetOS"] != null ? managementObject["OtherTargetOS"].ToString() : "undefined"),
-                    //    new HashEntry("PrimaryBIOS", managementObject["PrimaryBIOS"] != null ? managementObject["PrimaryBIOS"].ToString() : "undefined"),
-                    //    new HashEntry("ReleaseDate", managementObject["ReleaseDate"] != null ? managementObject["ReleaseDate"].ToString() : "undefined"),
-                    //    new HashEntry("SerialNumber", managementObject["SerialNumber"] != null ? managementObject["SerialNumber"].ToString() : "undefined"),
-                    //    new HashEntry("SMBIOSBIOSVersion", managementObject["SMBIOSBIOSVersion"] != null ? managementObject["SMBIOSBIOSVersion"].ToString() : "undefined"),
-                    //    new HashEntry("SMBIOSMajorVersion", managementObject["SMBIOSMajorVersion"] != null ? managementObject["SMBIOSMajorVersion"].ToString() : "undefined"),
-                    //    new HashEntry("SMBIOSMinorVersion", managementObject["SMBIOSMinorVersion"] != null ? managementObject["SMBIOSMinorVersion"].ToString() : "undefined"),
-                    //    new HashEntry("SMBIOSPresent", managementObject["SMBIOSPresent"] != null ? managementObject["SMBIOSPresent"].ToString() : "undefined"),
-                    //    new HashEntry("SoftwareElementID", managementObject["SoftwareElementID"] != null ? managementObject["SoftwareElementID"].ToString() : "undefined"),
-                    //    new HashEntry("SoftwareElementState", managementObject["SoftwareElementState"] != null ? managementObject["SoftwareElementState"].ToString() : "undefined"),
-                    //    new HashEntry("Status", managementObject["Status"] != null ? managementObject["Status"].ToString() : "undefined"),
-                    //    new HashEntry("SystemBiosMajorVersion", managementObject["SystemBiosMajorVersion"] != null ? managementObject["SystemBiosMajorVersion"].ToString() : "undefined"),
-                    //    new HashEntry("SystemBiosMinorVersion", managementObject["SystemBiosMinorVersion"] != null ? managementObject["SystemBiosMinorVersion"].ToString() : "undefined"),
-                    //    new HashEntry("TargetOperatingSystem", managementObject["TargetOperatingSystem"] != null ? managementObject["TargetOperatingSystem"].ToString() : "undefined"),
-                    //    new HashEntry("Version", managementObject["Version"] != null ? managementObject["Version"].ToString() : "undefined"),
-                    //});
-
-                    //db.SetAdd("biosData", ("bios:"+time));
-
                     biosDetailsList.Add(new BiosDetails()
                     {
                         BiosCharacteristics = managementObject["BiosCharacteristics"] != null ? managementObject["BiosCharacteristics"].ToString() : "undefined",
@@ -362,7 +324,6 @@ namespace ServerManagementSystem.Services
                         AutomaticManagedPagefile = automaticManagedPagefile,
                         AutomaticResetBootOption = automaticResetBootOption,
                         AutomaticResetCapability = automaticResetCapability,
-                        //BootOptionOnLimit = bootOptionOnLimit,
                         BootOptionOnWatchDog = bootOptionOnWatchDog,
                         BootROMSupported= bootROMSupported,
                         BootupState = bootupState,
@@ -719,27 +680,6 @@ namespace ServerManagementSystem.Services
                 }
             }
             return memoryPerformanceDetails;
-        }
-
-        public List<string> FetchProcessorPerformanceRedis()
-        {
-            List<string> listKeys = new List<string>();
-            var db = _redis.GetDatabase();
-            var keys = _redis.GetServer("localhost", 6379).Keys();
-            listKeys.AddRange(keys.Select(key => (string)key).ToList());
-
-            List<string> biosDetailsRedis = new List<string>();
-
-
-            var resp = db.HashGetAll(listKeys.Last());
-
-            foreach (var key in resp)
-            {
-                biosDetailsRedis.Add(key.ToString());
-            }
-
-
-            return biosDetailsRedis;
         }
 
         public List<ProcessorPerformanceDetails> FetachProcessorPerformanceDetails()
