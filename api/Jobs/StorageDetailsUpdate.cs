@@ -16,23 +16,22 @@ namespace ServerManagementSystem.Jobs
     public class StorageDetailsUpdate : IJob
     {
         private IConfiguration _configuration;
-        private readonly RedisService _redisServie;
+        private readonly IConnectionMultiplexer _redis;
         private List<string> serverNames;
-        private PropertyInfo[] StorageDetailsProperties;
         private List<StorageDetails> storageDetailsList;
         
-        public StorageDetailsUpdate(IConfiguration iconfig, RedisService redisService)
+        public StorageDetailsUpdate(IConfiguration iconfig, IConnectionMultiplexer redis)
         {
             _configuration = iconfig;
-            _redisServie = redisService;
+            _redis = redis;
             serverNames = _configuration.GetSection("ServerNames").Get<string[]>().ToList();
             storageDetailsList = new List<StorageDetails>();
         } 
         //static readonly ConnectionMultiplexer 
         public async Task Execute(IJobExecutionContext context)
         {
-            var db = _redisServie.Connect().GetDatabase();
-            var res = db.ListGetByIndex("storageData", -1);
+            var db = _redis.GetDatabase();
+            var res = await db.ListGetByIndexAsync("storageData", -1);
 
             foreach (string servername in serverNames)
             {
@@ -97,15 +96,13 @@ namespace ServerManagementSystem.Jobs
 
                 if (obj.Data != null && resDeserialized.Data != null && tempData != tempRes && jsonObj != null)
                 {
-                    db.ListRightPush("storageData", jsonObj);
+                   await db.ListRightPushAsync("storageData", jsonObj);
                 }
             }
             else
             {
-                db.ListRightPush("storageData", jsonObj);
+                await db.ListRightPushAsync("storageData", jsonObj);
             }
-        
-            _redisServie.Disconnect();
         }
     }
 }

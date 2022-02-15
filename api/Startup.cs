@@ -32,6 +32,13 @@ namespace ServerManagementSystem
         {
             services.AddSingleton<RedisService>();
 
+            var connectionURL = Configuration.GetValue<string>("RedisDB:connectionURL");
+            var connectionPort = Configuration.GetValue<string>("RedisDB:connectionPort");
+            var dbPassword = Configuration.GetValue<string>("RedisDB:dbPassword");
+            var multiplexer = ConnectionMultiplexer.Connect($"{connectionURL}:{connectionPort}, password={dbPassword}");
+         
+            services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
             services.Configure<QuartzOptions>(Configuration.GetSection("Quartz"));
 
             services.AddQuartz(q => {
@@ -60,25 +67,25 @@ namespace ServerManagementSystem
                 .StartNow()
                 .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
                 .RepeatForever()));
-                
+
                 q.ScheduleJob<ComputerSystemDetailsUpdate>(trigger => trigger
                 .WithIdentity("ComputerSystemDetails")
                 .StartNow()
                 .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
                 .RepeatForever()));
-                
+
                 q.ScheduleJob<UpdatesDetailsUpdate>(trigger => trigger
                 .WithIdentity("UpdatesDetails")
                 .StartNow()
                 .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
                 .RepeatForever()));
-                
+
                 q.ScheduleJob<StorageDetailsUpdate>(trigger => trigger
                 .WithIdentity("StorageDetails")
                 .StartNow()
                 .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
                 .RepeatForever()));
-          
+
 
             });
 

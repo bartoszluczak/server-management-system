@@ -16,17 +16,17 @@ namespace ServerManagementSystem.Jobs
     public class ProcessorDetailsUpdate : IJob
     {
         private IConfiguration _configuration;
-        private readonly RedisService _redisServie;
+        private readonly IConnectionMultiplexer _redis;
         private List<string> serverNames;
         private PropertyInfo[] ProcessorDetailsProperties;
         private List<ProcessorDetails> processorDetailsList;
 
         private readonly ManagementService _managementService;
 
-        public ProcessorDetailsUpdate(IConfiguration iconfig, RedisService redisService, ManagementService managementService)
+        public ProcessorDetailsUpdate(IConfiguration iconfig, IConnectionMultiplexer redis, ManagementService managementService)
         {
             _configuration = iconfig;
-            _redisServie = redisService;
+            _redis = redis;
             serverNames = _configuration.GetSection("ServerNames").Get<string[]>().ToList();
             processorDetailsList = new List<ProcessorDetails>();
             _managementService = managementService;
@@ -34,41 +34,40 @@ namespace ServerManagementSystem.Jobs
         //static readonly ConnectionMultiplexer 
         public async Task Execute(IJobExecutionContext context)
         {
-            var db = _redisServie.Connect().GetDatabase();
-            var res = db.ListGetByIndex("processorData", -1);
 
-            processorDetailsList = _managementService.FetchProcessorDetails();
+            var db = _redis.GetDatabase();
+            var res = await db.ListGetByIndexAsync("processorData", -1);
 
-            //foreach (string servername in serverNames)
-            //{
-            //    // Set up scope for remote server
-            //    // scope = new ManagementScope($"\\\\{servername}\\root\\CIMV2", connection);
+            foreach (string servername in serverNames)
+            {
+                // Set up scope for remote server
+                // scope = new ManagementScope($"\\\\{servername}\\root\\CIMV2", connection);
 
-            //    // Set up scope for local machine - develop
-            //    ManagementScope scope = new ManagementScope("root\\cimv2");
+                // Set up scope for local machine - develop
+                ManagementScope scope = new ManagementScope("root\\cimv2");
 
-            //    scope.Connect();
+                scope.Connect();
 
-            //    ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_Processor");
+                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_Processor");
 
-            //    ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
 
-            //    ProcessorDetails processorDetails = new ProcessorDetails();
+                ProcessorDetails processorDetails = new ProcessorDetails();
 
-            //    foreach (ManagementObject managementObject in searcher.Get())
-            //    {
-            //        ProcessorDetailsProperties = Type.GetType("ServerManagementSystem.Models.ProcessorDetails").GetProperties();
+                foreach (ManagementObject managementObject in searcher.Get())
+                {
+                    ProcessorDetailsProperties = Type.GetType("ServerManagementSystem.Models.ProcessorDetails").GetProperties();
 
-            //        for (int i = 0; i < ProcessorDetailsProperties.Length; i++)
-            //        {
-            //            var currentProperty = ProcessorDetailsProperties[i].Name.ToString();
-            //            var currentValue = managementObject[currentProperty] != null ? managementObject[currentProperty].ToString() : "undefined";
-            //            processorDetails.GetType().GetProperty(currentProperty).SetValue(processorDetails, currentValue, null);
-            //        }
-            //    }
-            //    processorDetailsList.Add(processorDetails);
+                    for (int i = 0; i < ProcessorDetailsProperties.Length; i++)
+                    {
+                        var currentProperty = ProcessorDetailsProperties[i].Name.ToString();
+                        var currentValue = managementObject[currentProperty] != null ? managementObject[currentProperty].ToString() : "undefined";
+                        processorDetails.GetType().GetProperty(currentProperty).SetValue(processorDetails, currentValue, null);
+                    }
+                }
+                processorDetailsList.Add(processorDetails);
 
-            //}
+            }
 
 
             var time = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
@@ -90,15 +89,13 @@ namespace ServerManagementSystem.Jobs
 
                 if (obj.Data != null && resDeserialized.Data != null && tempData != tempRes && jsonObj != null)
                 {
-                    db.ListRightPush("processorData", jsonObj);
+                   await db.ListRightPushAsync("processorData", jsonObj);
                 }
             }
             else
             {
-                db.ListRightPush("processorData", jsonObj);
+               await db.ListRightPushAsync("processorData", jsonObj);
             }
-        
-            _redisServie.Disconnect();
         }
     }
 }

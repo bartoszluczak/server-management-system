@@ -2,52 +2,33 @@
 using ServerManagementSystem.Models;
 using StackExchange.Redis;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ServerManagementSystem.Services
 {
     public class RedisService
     {
-        private readonly IConfiguration _config;
-        private ConnectionMultiplexer _redis;
+        private readonly IConnectionMultiplexer _redis;
 
-        public RedisService(IConfiguration config)
+        public RedisService(IConnectionMultiplexer redis)
         {
-            _config = config;
+            _redis = redis;
         }
 
-        public ConnectionMultiplexer Connect()
+        public async Task<RedisDataModel> FetchData(string dataFieldName, int index)
         {
-            var connectionURL = _config.GetValue<string>("RedisDB:connectionURL");
-            var connectionPort = _config.GetValue<string>("RedisDB:connectionPort");
-            var dbPassword = _config.GetValue<string>("RedisDB:dbPassword");
-            _redis = ConnectionMultiplexer.Connect($"{connectionURL}:{connectionPort}, password={dbPassword}");
-            return _redis;
-        }
-
-        public void Disconnect()
-        {
-            _redis.Close();
-        }
-
-        public RedisDataModel FetchData(string dataFieldName, int index)
-        {
-            Connect();
             var db = _redis.GetDatabase();
-            var res = db.ListGetByIndex(dataFieldName, index);
-
+            var res = await db.ListGetByIndexAsync(dataFieldName, index);
             var data = JsonSerializer.Deserialize<RedisDataModel>(res);
-            Disconnect();
             return data;
         }
 
-        public RedisDataModel FetchList(string dataFieldName, int startIndex, int endIndex)
+        public async Task<RedisDataModel> FetchList(string dataFieldName, int startIndex, int endIndex)
         {
-            Connect();
             var db = _redis.GetDatabase();
-            var res = db.ListRange(dataFieldName, startIndex, endIndex).ToString();
-
-            var data = JsonSerializer.Deserialize<RedisDataModel>(res);
-            Disconnect();
+            var res = await db.ListRangeAsync(dataFieldName, startIndex, endIndex);
+            var resString = res.ToString();
+            var data = JsonSerializer.Deserialize<RedisDataModel>(resString);
             return data;
         }
             

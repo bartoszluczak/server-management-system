@@ -16,23 +16,24 @@ namespace ServerManagementSystem.Jobs
     public class BiosDetailsUpdate : IJob
     {
         private IConfiguration _configuration;
-        private readonly RedisService _redisServie;
+        private readonly IConnectionMultiplexer _redis;
         private List<string> serverNames;
         private PropertyInfo[] BiosDetailsProperties;
         private List<BiosDetails> biosDetailsList;
-        
-        public BiosDetailsUpdate(IConfiguration iconfig, RedisService redisService)
+
+        public BiosDetailsUpdate(IConfiguration iconfig, IConnectionMultiplexer redis)
         {
             _configuration = iconfig;
-            _redisServie = redisService;
             serverNames = _configuration.GetSection("ServerNames").Get<string[]>().ToList();
             biosDetailsList = new List<BiosDetails>();
+            _redis = redis;
         } 
         //static readonly ConnectionMultiplexer 
         public async Task Execute(IJobExecutionContext context)
         {
-            var db = _redisServie.Connect().GetDatabase();
-            var res = db.ListGetByIndex("biosData", -1);
+
+            var db = _redis.GetDatabase();
+            var res = await db.ListGetByIndexAsync("biosData", -1);
 
             foreach (string servername in serverNames)
             {
@@ -85,15 +86,13 @@ namespace ServerManagementSystem.Jobs
 
                 if (obj.Data != null && resDeserialized.Data != null && tempData != tempRes && jsonObj != null)
                 {
-                    db.ListRightPush("biosData", jsonObj);
+                   await db.ListRightPushAsync("biosData", jsonObj);
                 }
             }
             else
             {
-                db.ListRightPush("biosData", jsonObj);
+                await db.ListRightPushAsync("biosData", jsonObj);
             }
-        
-            _redisServie.Disconnect();
         }
     }
 }
