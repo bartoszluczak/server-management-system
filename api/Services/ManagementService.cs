@@ -182,14 +182,6 @@ namespace ServerManagementSystem.Services
             return biosDetailsList;
         }
 
-        //public string FetchBiosDetailsRedis()
-        //{
-        //    var db = _redisServie.Connect().GetDatabase();
-        //    var res = db.ListGetByIndex("biosData", -1);
-        //    _redisServie.Disconnect();
-        //    return res;
-        //}
-
         public List<ProcessorDetails> FetchProcessorDetails()
         {
             foreach (string servername in serverNames)
