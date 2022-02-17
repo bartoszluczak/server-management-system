@@ -1,0 +1,72 @@
+﻿namespace ServerManagementSystem.Models.PerformanceCounterClasses
+{
+    public class SmartScanQueries
+    {
+        public string Caption { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public string Frequency_Object { get; set; }
+        public string Frequency_PerfTime { get; set; }
+        public string Frequency_Sys100NS { get; set; }
+        public string Timestamp_Object { get; set; }
+        public string Timestamp_PerfTime { get; set; }
+        public string Timestamp_Sys100NS { get; set; }
+        public string AddressFamilySelectorConnectionSpentTime { get; set; }
+        public string AddressFamilySelectorDecisionSpentTime { get; set; }
+        public string AddressFamilySelectorLastRefreshTime { get; set; }
+        public string AddressFamilySelectorSelectedFamily { get; set; }
+        public string AddressFamilySelectorSelectedIP { get; set; }
+        public string AsyncCRCCachedItemPurgedCount { get; set; }
+        public string CheckServerStatusCount { get; set; }
+        public string CRCCachedItems { get; set; }
+        public string CRCCacheHitRate { get; set; }
+        public string CRCCacheHits { get; set; }
+        public string CRCDiffPurgedCount { get; set; }
+        public string CRCQueries { get; set; }
+        public string CRCQueryErrorsNetwork { get; set; }
+        public string CRCQueryErrorsOthers { get; set; }
+        public string CRCQueryErrorsServer { get; set; }
+        public string CRCQueryErrorsTimeout { get; set; }
+        public string CRCQueryOverheadVolumeReceived { get; set; }
+        public string CRCQueryOverheadVolumeSent { get; set; }
+        public string CRCQueryQueueSize { get; set; }
+        public string CRCQueryTimeAverage { get; set; }
+        public string CRCQueryTimeMaximum { get; set; }
+        public string CRCQueryTimeMinimum { get; set; }
+        public string CRCQueryTimeTotal { get; set; }
+        public string CRCQueryVolume { get; set; }
+        public string CRCQueryVolumeReceived { get; set; }
+        public string CRCQueryVolumeSent { get; set; }
+        public string EventCallbackQueueSize { get; set; }
+        public string ForcedQueryCount { get; set; }
+        public string FullPurgeCRCCacheCountAPI { get; set; }
+        public string FullPurgeCRCCacheCountIncomplete { get; set; }
+        public string FullPurgeCRCCacheFullUpdate { get; set; }
+        public string HTTPQueryExternalCacheCountHit { get; set; }
+        public string HTTPQueryExternalCacheCountMiss { get; set; }
+        public string HTTPQueryTimeAverage { get; set; }
+        public string HTTPQueryTimeMaximum { get; set; }
+        public string HTTPQueryTimeMinimum { get; set; }
+        public string HTTPQueryTimeTotal { get; set; }
+        public string HTTPRequests { get; set; }
+        public string SmartQueryFilterFalsePositives { get; set; }
+        public string SmartQueryFilterHitsDiff { get; set; }
+        public string SmartQueryFilterHitsMain { get; set; }
+        public string SmartQueryFilterHitsMiss { get; set; }
+        public string SmartQueryFilterPatternDiffEntryCount { get; set; }
+        public string SmartQueryFilterPatternDiffVersionCount { get; set; }
+        public string SmartQueryFilterPatternDownloadedOverheadVolume { get; set; }
+        public string SmartQueryFilterPatternDownloadedVolume { get; set; }
+        public string SmartQueryFilterPatternDownloads { get; set; }
+        public string SmartQueryFilterPatternVersion { get; set; }
+        public string SmartQueryFilterPatternVersionMain { get; set; }
+        public string SmartQueryFilterQueries { get; set; }
+        public string SmartScanMode { get; set; }
+        public string TCPConnections { get; set; }
+        public string UnsynchronizedSmartQueryFilterPattern { get; set; }
+        public string UpdateQueueSize { get; set; }
+        public string UpdateRequests { get; set; }
+        public string VinfoCachedItemsPurgeCount { get; set; }
+        public string PSComputerName { get; set; }
+    }
+}
