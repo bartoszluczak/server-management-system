@@ -130,7 +130,7 @@ namespace ServerManagementSystem.Services
                 }
             }
             var time = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
-            var obj = new RedisDataModel
+            var obj = new RedisDataModel<BiosDetails>
             {
                 TimeStamp = time,
                 KeyName = "biosData",

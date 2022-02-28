@@ -101,57 +101,57 @@ namespace ServerManagementSystem.Controllers
         [HttpGet("redis/bios")]
         public async Task<IActionResult>  GetBiosRedis()
         {
-            var data = await _redisServie.FetchData("biosData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+            var data = await _redisServie.FetchData<RedisDataModel<BiosDetails>>("biosData", -1);
+            return Ok(new RedisDataModel<BiosDetails> { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         
         [HttpGet("redis/memory")]
         public async Task<IActionResult>  GetMemoryRedis()
         {
-            var data = await _redisServie.FetchData("memoryData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+            var data = await _redisServie.FetchData<RedisDataModel<MemoryDetails>>("memoryData", -1);
+            return Ok(new RedisDataModel<MemoryDetails> { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         
         [HttpGet("redis/processor")]
         public async Task<IActionResult> GetProcessorRedis()
         {
-            var data = await _redisServie.FetchData("processorData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+            var data = await _redisServie.FetchData<RedisDataModel<ProcessorDetails>>("processorData", -1);
+            return Ok(new RedisDataModel<ProcessorDetails> { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         
         [HttpGet("redis/computersystem")]
         public async Task<IActionResult> GetComputerSystemRedis()
         {
-            var data = await _redisServie.FetchData("computerSystemData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+            var data = await _redisServie.FetchData<RedisDataModel<ComputerSystemDetails>>("computerSystemData", -1);
+            return Ok(new RedisDataModel<ComputerSystemDetails> { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         
         [HttpGet("redis/updates")]
         public async Task<IActionResult> GetUpdatesRedis()
         {
-            var data = await _redisServie.FetchData("updatesData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+            var data = await _redisServie.FetchData<RedisDataModel<UpdatesDetails>>("updatesData", -1);
+            return Ok(new RedisDataModel<UpdatesDetails> { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         
         [HttpGet("redis/storage")]
         public async Task<IActionResult> GetStorageRedis()
         {
-            var data = await _redisServie.FetchData("storageData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+            var data = await _redisServie.FetchData<RedisDataModel<StorageDetails>>("storageData", -1);
+            return Ok(new RedisDataModel<StorageDetails> { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         
         [HttpGet("redis/motherboardtemps")]
         public async Task<IActionResult> GetMotherboardTempsRedis()
         {
-            var data = await _redisServie.FetchData("motherboardtempsData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+            var data = await _redisServie.FetchData<RedisDataModel<MotherBoardTempsDetails>>("motherboardtempsData", -1);
+            return Ok(new RedisDataModel<MotherBoardTempsDetails> { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
         }
         
-        [HttpGet("redis/casefans")]
-        public async Task<IActionResult> GetCaseFansRedis()
-        {
-            var data = await _redisServie.FetchData("casefansData", -1);
-            return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
-        }
+        //[HttpGet("redis/casefans")]
+        //public async Task<IActionResult> GetCaseFansRedis()
+        //{
+        //    var data = await _redisServie.FetchData<RedisDataModel>("casefansData", -1);
+        //    return Ok(new RedisDataModel { TimeStamp = data.TimeStamp, KeyName = data.KeyName, Data = data.Data });
+        //}
     }
 }

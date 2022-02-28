@@ -71,7 +71,7 @@ namespace ServerManagementSystem.Jobs
 
 
             var time = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
-            var obj = new RedisDataModel
+            var obj = new RedisDataModel<ProcessorDetails>
             {
                 TimeStamp = time,
                 KeyName = "processorData",
@@ -82,7 +82,7 @@ namespace ServerManagementSystem.Jobs
 
             if (!res.IsNullOrEmpty)
             {
-                var resDeserialized = (res != 0) ? JsonSerializer.Deserialize<RedisDataModel>(res) : null;
+                var resDeserialized = (res != 0) ? JsonSerializer.Deserialize<RedisDataModel<ProcessorDetails>>(res) : null;
 
                 var tempData = JsonSerializer.Serialize(processorDetailsList);
                 var tempRes = resDeserialized.Data.ToString();

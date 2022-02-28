@@ -15,20 +15,20 @@ namespace ServerManagementSystem.Services
             _redis = redis;
         }
 
-        public async Task<RedisDataModel> FetchData(string dataFieldName, int index)
+        public async Task<T> FetchData<T>(string dataFieldName, int index)
         {
             var db = _redis.GetDatabase();
             var res = await db.ListGetByIndexAsync(dataFieldName, index);
-            var data = JsonSerializer.Deserialize<RedisDataModel>(res);
+            var data = JsonSerializer.Deserialize<T>(res);
             return data;
         }
 
-        public async Task<RedisDataModel> FetchList(string dataFieldName, int startIndex, int endIndex)
+        public async Task<T> FetchList<T>(string dataFieldName, int startIndex, int endIndex)
         {
             var db = _redis.GetDatabase();
             var res = await db.ListRangeAsync(dataFieldName, startIndex, endIndex);
             var resString = res.ToString();
-            var data = JsonSerializer.Deserialize<RedisDataModel>(resString);
+            var data = JsonSerializer.Deserialize<T>(resString);
             return data;
         }
             

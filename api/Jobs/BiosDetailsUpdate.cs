@@ -30,7 +30,7 @@ namespace ServerManagementSystem.Jobs
         } 
         //static readonly ConnectionMultiplexer 
         public async Task Execute(IJobExecutionContext context)
-        {
+      {
 
             var db = _redis.GetDatabase();
             var res = await db.ListGetByIndexAsync("biosData", -1);
@@ -68,7 +68,7 @@ namespace ServerManagementSystem.Jobs
                     
 
             var time = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
-            var obj = new RedisDataModel
+            var obj = new RedisDataModel<BiosDetails>
             {
                 TimeStamp = time,
                 KeyName = "biosData",
@@ -79,7 +79,7 @@ namespace ServerManagementSystem.Jobs
 
             if (!res.IsNullOrEmpty)
             {
-                var resDeserialized = (res != 0) ? JsonSerializer.Deserialize<RedisDataModel>(res) : null;
+                var resDeserialized = (res != 0) ? JsonSerializer.Deserialize<RedisDataModel<BiosDetails>>(res) : null;
 
                 var tempData = JsonSerializer.Serialize(biosDetailsList);
                 var tempRes = resDeserialized.Data.ToString();

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using StackExchange.Redis;
 using Quartz;
 using ServerManagementSystem.Jobs;
+using ServerManagementSystem.Models;
 
 namespace ServerManagementSystem
 {
@@ -30,6 +31,10 @@ namespace ServerManagementSystem
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services
+        .AddGraphQLServer()
+        .AddQueryType<Query>();
+
             services.AddSingleton<RedisService>();
 
             var connectionURL = Configuration.GetValue<string>("RedisDB:connectionURL");
@@ -134,6 +139,7 @@ namespace ServerManagementSystem
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGraphQL();
             });
 
             
