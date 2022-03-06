@@ -22,7 +22,7 @@ namespace ServerManagementSystem.Models
 
         public async Task<RedisDataModel<BiosDetails>> GetBiosDetails()
         {
-            var data = await _redisServie.FetchData<RedisDataModel<BiosDetails>>("biosData", -1);
+            var data = await _redisServie.FetchData<RedisDataModel<BiosDetails>>("BiosDetails", -1);
             var resp = new RedisDataModel<BiosDetails> { 
                 TimeStamp = data.TimeStamp,
                 KeyName = data.KeyName,

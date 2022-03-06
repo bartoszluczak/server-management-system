@@ -41,7 +41,11 @@ namespace ServerManagementSystem
             var connectionPort = Configuration.GetValue<string>("RedisDB:connectionPort");
             var dbPassword = Configuration.GetValue<string>("RedisDB:dbPassword");
             var multiplexer = ConnectionMultiplexer.Connect($"{connectionURL}:{connectionPort}, password={dbPassword}");
-         
+            var servicesToMonitor = Configuration.GetSection("ServicesToMonitor").Get<string[]>().ToList();
+
+            List<JobItem> AllJobsList = new List<JobItem>();
+            AllJobsList.Add(new JobItem() { DataType = Type.GetType("ServerManagementSystem.Models.BiosDetails"), DataName = "BiosDetails", DataModel = "ServerManagementSystem.Models.BiosDetails", DataToQuery ="Win32_BIOS" });
+
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
             services.Configure<QuartzOptions>(Configuration.GetSection("Quartz"));
@@ -55,11 +59,53 @@ namespace ServerManagementSystem
                     tp.MaxConcurrency = 10;
                 });
 
-                q.ScheduleJob<BiosDetailsUpdate>(trigger => trigger
-                .WithIdentity("BiosDetails")
-                .StartNow()
-                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
-                .RepeatForever()));
+                foreach (string serviceName in servicesToMonitor)
+                {
+                    var config = AllJobsList.Find(item => item.DataName.ToLower() == serviceName.ToLower());
+                    var servicesJob = new JobKey($"{serviceName}Job", "group1");
+
+                    //T type = Type.GetType(config.DataModel);
+                    //q.AddJob<typoe>(servicesJob, job => job
+                    //.UsingJobData("DataModel", config.DataModel)
+                    //.UsingJobData("DataName", config.DataName)
+                    //.UsingJobData("DataToQuery", config.DataToQuery));
+
+                    //q.AddTrigger(trigger => trigger
+                    //.WithIdentity(config.DataName)
+                    //.ForJob(servicesJob)
+                    //.StartNow()
+                    //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                    //.RepeatForever()));
+                }
+
+
+                //var biosDetailsJob = new JobKey("biosDetailsJob", "group1");
+
+                //q.AddJob<DefaultJob<BiosDetails>.Job>(biosDetailsJob, job => job
+                //.UsingJobData("DataModel", "ServerManagementSystem.Models.BiosDetails")
+                //.UsingJobData("DataName", "BiosDetails")
+                //.UsingJobData("DataToQuery", "Win32_BIOS"));
+
+
+                //q.AddTrigger(trigger => trigger
+                //.WithIdentity("BiosDetails")
+                //.ForJob(biosDetailsJob)
+                //.StartNow()
+                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                //.RepeatForever()));
+
+
+                //q.ScheduleJob<DefaultJob<BiosDetails>.Job>(trigger => trigger
+                //.WithIdentity("BiosDetails")
+                //.StartNow()
+                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                //.RepeatForever()));
+
+                //q.ScheduleJob<BiosDetailsUpdate>(trigger => trigger
+                //.WithIdentity("BiosDetails")
+                //.StartNow()
+                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10))
+                //.RepeatForever()));
 
                 q.ScheduleJob<MemoryDetailsUpdate>(trigger => trigger
                 .WithIdentity("MemoryDetails")
@@ -139,7 +185,7 @@ namespace ServerManagementSystem
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapGraphQL();
+                endpoints.MapGraphQL("/api/graphql");
             });
 
             
